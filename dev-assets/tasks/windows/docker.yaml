@@ -23,7 +23,8 @@ tasks:
   build:
     desc: Build the app and the corresponding Docker image (tagged as "miw-test")
     cmds:
-      - echo "Not implemented for windows!"
+      - task: :app:build
+      - docker build -t local-miw --platform linux/amd64 .
 
   start-middleware:
     desc: Spin up local Docker environment
@@ -33,25 +34,41 @@ tasks:
       OPTIONS: '{{ default "" .OPTIONS }}'
       CONTAINERS: '{{ default "postgres keycloak" .CONTAINERS }}'
     cmds:
-      - echo "Not implemented for windows!"
+      - cat postgres/db.sh.tpl | envsubst > postgres/db.sh
+      - chmod +x postgres/db.sh
+      - "docker compose up {{.OPTIONS}} {{.CONTAINERS}}"
 
   stop-middleware:
     desc: Stop local Docker environment
     dir: dev-assets/docker-environment
     cmds:
-      - echo "Not implemented for windows!"
+      - docker compose down
+      - cmd: docker volume remove docker-environment_postgres_data
+        ignore_error: true
+      - rm -f postgres/db.sh
 
   start-app:
     desc: Run the app in a container environment (including middleware aka Postgresql and Keycloak)
     cmds:
-      - echo "Not implemented for windows!"
+      - task: start-middleware
+        vars:
+          OPTIONS: "-d"
+      - task: build
+      - cmd: docker rm miw-app
+        ignore_error: true
+      - task: start-middleware
+        vars:
+          CONTAINERS: "miw"
 
   stop-app:
     desc: Stop all running containers
     cmds:
-      - echo "Not implemented for windows!"
+      - cmd: docker stop miw
+        ignore_error: true
+      - task: stop-middleware
 
   cleanup:
     desc: Cleans everything about docker...
     cmds:
-      - echo "Not implemented for windows!"
+      - cmd: docker rmi local-miw
+        ignore_error: true

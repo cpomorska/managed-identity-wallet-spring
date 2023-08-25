@@ -34,7 +34,7 @@ tasks:
   test-report:
     desc: Generates the test report for MIW
     cmds:
-      - ./gradlew jacocoTestReport
+      - ./gradlew.bat jacocoTestReport
 
   coverage:
     desc: Runs the coverage check
@@ -44,4 +44,4 @@ tasks:
   clean:
     desc: Cleans the build directory
     cmds:
-      - ./gradlew clean
+      - ./gradlew.bat clean

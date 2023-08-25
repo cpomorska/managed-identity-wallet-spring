@@ -16,32 +16,31 @@
 # *
 # * SPDX-License-Identifier: Apache-2.0
 # ********************************************************************************/
-
 version: '3'
 
 tasks:
   build:
     desc: Build the whole app
     cmds:
-      - ./gradlew build -PgithubToken=$GITHUB_TOKEN $SKIP_GRADLE_TASKS_PARAM
+      - "sh gradlew build -PgithubToken=$GITHUB_TOKEN $SKIP_GRADLE_TASKS_PARAM"
 
   get-token:
     desc: Obtain a BEARER token from Keycloak to access the MIW API
     dir: dev-assets/scripts
     cmds:
-      - echo "Not implemented for windows!"
+      - echo "BAERER $(./get_Token.sh)"
 
   test-report:
     desc: Generates the test report for MIW
     cmds:
-      - .\gradlew.bat jacocoTestReport
+      - ./gradlew.bat jacocoTestReport
 
   coverage:
     desc: Runs the coverage check
     cmds:
-      - .\gradlew.bat jacocoTestCoverageVerification
+      - ./gradlew.bat jacocoTestCoverageVerification
 
   clean:
     desc: Cleans the build directory
     cmds:
-      - .\gradlew.bat clean
+      - 'sh gradlew clean'
