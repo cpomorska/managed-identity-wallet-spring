@@ -1,4 +1,4 @@
-# Managed Identity Wallets <a id="introduction"></a>
+# Managed Identity Wallets `<a id="introduction"></a>`
 
 The Managed Identity Wallets (MIW) service implements the Self-Sovereign-Identity (SSI) using did:web
 
@@ -15,13 +15,13 @@ There are two possible flows, which can be used for development:
 
 Following tools the MIW development team used successfully:
 
-| Area     | Tool     | Download Link                                   | Comment                                                                                           |
-|----------|----------|-------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| IDE      | IntelliJ | https://www.jetbrains.com/idea/download/        | Use [envfile plugin](https://plugins.jetbrains.com/plugin/7861-envfile) to use the **local** flow |
-| Build    | Gradle   | https://gradle.org/install/                     |
-| Runtime  | Docker   | https://www.docker.com/products/docker-desktop/ |                                                                                                   |
-| Database | DBeaver  | https://dbeaver.io/                             |
-| IAM      | Keycloak | https://www.keycloak.org/                       |                                                                                                   |
+| Area     | Tool     | Download Link                                   | Comment                                                                                          |
+|----------|----------|-------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| IDE      | IntelliJ | https://www.jetbrains.com/idea/download/        | Use[envfile plugin](https://plugins.jetbrains.com/plugin/7861-envfile) to use the **local** flow |
+| Build    | Gradle   | https://gradle.org/install/                     |                                                                                                  |
+| Runtime  | Docker   | https://www.docker.com/products/docker-desktop/ |                                                                                                  |
+| Database | DBeaver  | https://dbeaver.io/                             |                                                                                                  |
+| IAM      | Keycloak | https://www.keycloak.org/                       |                                                                                                  |
 
 # Administrator Documentation
 
@@ -49,34 +49,58 @@ assigned to the client using *Clients > miw_private_client > Client Scopes*
 The available scopes/roles are:
 
 1. Role `add_wallets` to create a new wallet
-
 2. Role `view_wallets`:
-    * to get a list of all wallets
-    * to retrieve one wallet by its identifier
-    * to validate a Verifiable Credential
-    * to validate a Verifiable Presentation
-    * to get all stored Verifiable Credentials
 
+   * to get a list of all wallets
+   * to retrieve one wallet by its identifier
+   * to validate a Verifiable Credential
+   * to validate a Verifiable Presentation
+   * to get all stored Verifiable Credentials
 3. Role `update_wallets` for the following actions:
-    * to store Verifiable Credential
-    * to issue a Verifiable Credential
-    * to issue a Verifiable Presentation
 
+   * to store Verifiable Credential
+   * to issue a Verifiable Credential
+   * to issue a Verifiable Presentation
 4. Role `update_wallet`:
-    * to remove a Verifiable Credential
-    * to store a Verifiable Credential
-    * to issue a Verifiable Credential
-    * to issue a Verifiable Presentation
 
+   * to remove a Verifiable Credential
+   * to store a Verifiable Credential
+   * to issue a Verifiable Credential
+   * to issue a Verifiable Presentation
 5. Role `view_wallet` requires the BPN of Caller and it can be used:
-    * to get the Wallet of the related BPN
-    * to get stored Verifiable Credentials of the related BPN
-    * to validate any Verifiable Credential
-    * to validate any Verifiable Presentation
+
+   * to get the Wallet of the related BPN
+   * to get stored Verifiable Credentials of the related BPN
+   * to validate any Verifiable Credential
+   * to validate any Verifiable Presentation
 6. Role `manage_app` used to change the log level of the application at runtime. Check Logging in the application section for more
    details
 
-Additionally a Token mapper can be created under *Clients* &gt;
+Overview by Endpoint
+
+| Artefact                                  | CRUD   | HTTP Verb/ Request | Endpoint                              | Roles                                        | Constraints                                                |
+|-------------------------------------------|--------|--------------------|---------------------------------------|----------------------------------------------|------------------------------------------------------------|
+| **Wallets**                               | Read   | GET                | /api/wallets                          | **view_wallets**                             |                                                            |
+| **Wallets**                               | Create | POST               | /api/wallets                          | **add_wallets**                              | **1 BPN : 1 WALLET**(PER ONE [1] BPN ONLY ONE [1] WALLET!) |
+| **Wallets**                               | Create | POST               | /api/wallets/{identifier}/credentials | **update_wallets** <br />OR**update_wallet** |                                                            |
+| **Wallets**                               | Read   | GET                | /api/wallets/{identifier}             | **view_wallets** OR<br />**view_wallet**     |                                                            |
+| **Verifiable Presentations - Generation** | Create | POST               | /api/presentation                     | **update_wallets** OR<br />**update_wallet** |                                                            |
+| **Verifiable Presentations - Validation** | Create | POST               | /api/presentations/validation         | **view_wallets** OR<br />**view_wallet**     |                                                            |
+| **Verifiable Credential - Holder**        | Read   | GET                | /api/credentials                      | **view_wallets** OR<br />**view_wallet**     |                                                            |
+| **Verifiable Credential - Holder**        | Create | POST               | /api/credentials                      | **update_wallet** OR<br />**update_wallet**  |                                                            |
+| **Verifiable Credential - Holder**        | Delete | DELETE             | /api/credentials                      | **update_wallet**                            |                                                            |
+| **Verfiable Credential - Validation**     | Create | POST               | /api/credentials/validation           | **view_wallets** OR<br />**view_wallet**     |                                                            |
+| **Verfiable Credential - Issuer**         | Read   | GET                | /api/credentials/issuer               | **view_wallets**                             |                                                            |
+| **Verfiable Credential - Issuer**         | Create | POST               | /api/credentials/issuer               | **update_wallets**                           |                                                            |
+| **Verfiable Credential - Issuer**         | Create | POST               | /api/credentials/issuer/membership    | **update_wallets**                           |                                                            |
+| **Verfiable Credential - Issuer**         | Create | POST               | /api/credentials/issuer/framework     | **update_wallets**                           |                                                            |
+| **Verfiable Credential - Issuer**         | Create | POST               | /api/credentials/issuer/distmantler   | **update_wallets**                           |                                                            |
+| **DIDDocument**                           | Read   | GET                | /{bpn}/did.json                       | N/A                                          |                                                            |
+| **DIDDocument**                           | Read   | GET                | /api/didDocuments/{identifier}        | N/A                                          |                                                            |
+
+
+
+Additionally, a Token mapper can be created under *Clients* &gt;
 *ManagedIdentityWallets* &gt; *Mappers* &gt; *create* with the following
 configuration (using as an example `BPNL000000001`):
 
@@ -90,9 +114,9 @@ configuration (using as an example `BPNL000000001`):
 | Add to ID token                    | OFF             |
 | Add to access token                | ON              |
 | Add to userinfo                    | OFF             |
-| includeInAccessTokenResponse.label | ON              | 
+| includeInAccessTokenResponse.label | ON              |
 
-If you receive an error message, that the client secret is not valid, please go into
+If you receive an error message that the client secret is not valid, please go into
 keycloak admin and within *Clients > Credentials* recreate the secret.
 
 ## Development Setup
@@ -123,20 +147,14 @@ Description of the env files:
 > settings (under "features in development"). This should fix the issue.
 
 In both env files (env.local and env.docker) you need to set _GITHUB_USERNAME_ and _GITHUB_TOKEN_ in order to be able to
-build the add,
-because the SSI lib is stored in a private repo (you also need the proper rights to access the repo).
+build the app, because the SSI lib is stored in a private repo (you also need the proper rights to access the repo).
 The access token need to have `read:packages` access. (ref: https://github.com/settings/tokens/new)
-
-And change the _COMPOSE_COMMAND_ variable to either _docker-compose_ or _docker compose_. It depends on docker compose
-version you are using: V1 or V2
 
 Note: _SKIP_GRADLE_TASKS_PARAM_ is used to pass parameters to the build process of the MIW jar. Currently, it skips the
 tests and code coverage, but speeds up the build time.
-If you want to activate it, just comment it out
-like `SKIP_GRADLE_TASKS_PARAM="" #"-x jacocoTestCoverageVerification -x test"`
+If you want to activate it, just comment it out like `SKIP_GRADLE_TASKS_PARAM="" #"-x jacocoTestCoverageVerification -x test"`
 
-After every execution (either _local_ or _docker_ flow), run the matching "stop" task (
-e.g.: `task docker:start-app` -> `task docker:stop-app`)
+After every execution (either _local_ or _docker_ flow), run the matching "stop" task (e.g.: `task docker:start-app` -> `task docker:stop-app`)
 
 When you just run `task` without parameters, you will see all tasks available.
 
@@ -153,7 +171,7 @@ When you just run `task` without parameters, you will see all tasks available.
 
 ### docker
 
-1. Run `task docker:start-app` and wait until it shows " Started ManagedIdentityWalletsApplication in ... seconds"
+1. Run `task docker:start-app` and wait until it shows "Started ManagedIdentityWalletsApplication in ... seconds"
 2. Run `task app:get-token` and copy the token (including "BEARER" prefix) (Mac users have the token already in their clipboard :) )
 3. Open API doc on http://localhost:8000 (or what port you configured in the _env.local_ file)
 4. Click on Authorize on swagger UI and on the dialog paste the token into the "value" input
@@ -161,6 +179,7 @@ When you just run `task` without parameters, you will see all tasks available.
 6. MIW is up and running
 
 # End Users
+
 See OpenAPI documentation, which is automatically created from
 the source and available on each deployment at the `/docs/api-docs/docs` endpoint
 (e.g. locally at http://localhost:8087/docs/api-docs/docs). An export of the JSON
@@ -199,7 +218,7 @@ PostgreSQL and Keycloak Docker containers locally.
 Before running the tests, please ensure that you have Docker runtime installed and that you have the necessary
 permissions to run containers.
 
-Alternative, you can skip test during the build with ``` ./gradlew clean build -x test```
+Alternative, you can skip test during the build with `` ./gradlew clean build -x test``
 
 #### 2. Database migration related issue
 
@@ -214,11 +233,11 @@ In case you encounter any database-related issues, you can resolve them by follo
 
 This process ensures that any issues with the database schema are resolved by recreating it in a fresh state.
 
-# Environment Variables <a id= "environmentVariables"></a>
+# Environment Variables `<a id= "environmentVariables"></a>`
 
 | name                            | description                                                                                  | default value                                                                                                                                       |
 |---------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| APPLICATION_PORT                | port number of application                                                                   | 8080                                                                                                                                                | 
+| APPLICATION_PORT                | port number of application                                                                   | 8080                                                                                                                                                |
 | APPLICATION_ENVIRONMENT         | Environment of the application ie. local, dev, int and prod                                  | local                                                                                                                                               |
 | DB_HOST                         | Database host                                                                                | localhost                                                                                                                                           |
 | DB_PORT                         | Port of database                                                                             | 5432                                                                                                                                                |
@@ -266,22 +285,21 @@ role ``manage_app``. We can add this role to authority wallet client using keycl
 
 1. API to get current log settings
 
-```agsl
+```bash
 curl --location 'http://localhost:8090/actuator/loggers' \
 --header 'Authorization: Bearer access_token'
 ```
 
 2. Change log level at runtime
 
-```agsl
-
+```bash
 curl --location 'http://localhost:8090/actuator/loggers/{java package name}' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer access_token' \
 --data '{"configuredLevel":"INFO"}'
-
+```
 i.e.
-
+```bash
 curl --location 'http://localhost:8090/actuator/loggers/org.eclipse.tractusx.managedidentitywallets' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer access_token' \
@@ -294,3 +312,7 @@ curl --location 'http://localhost:8090/actuator/loggers/org.eclipse.tractusx.man
 2. https://github.com/dasniko/testcontainers-keycloak
 3. https://github.com/smartSenseSolutions/smartsense-java-commons
 4. https://github.com/catenax-ng/product-lab-ssi
+
+## Notice for Docker image
+
+See [Docker-hub-notice.md](./Docker-hub-notice.md)

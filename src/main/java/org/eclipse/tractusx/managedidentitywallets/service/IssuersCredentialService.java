@@ -435,23 +435,19 @@ public class IssuersCredentialService extends BaseService<IssuersCredential, Lon
         String proofTye = verifiableCredential.getProof().get(StringPool.TYPE).toString();
         LinkedDataProofValidation proofValidation;
         if (SignatureType.ED21559.toString().equals(proofTye)) {
-            proofValidation = LinkedDataProofValidation.newInstance(
-                    SignatureType.ED21559,
-                    didDocumentResolverRegistry);
+            proofValidation = LinkedDataProofValidation.newInstance(SignatureType.ED21559, didDocumentResolverRegistry);
         } else if (SignatureType.JWS.toString().equals(proofTye)) {
-            proofValidation = LinkedDataProofValidation.newInstance(
-                    SignatureType.JWS,
-                    didDocumentResolverRegistry);
+            proofValidation = LinkedDataProofValidation.newInstance(SignatureType.JWS, didDocumentResolverRegistry);
         } else {
             throw new BadDataException(String.format("Invalid proof type: %s", proofTye));
         }
 
         boolean valid = proofValidation.verifiyProof(verifiableCredential);
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new TreeMap<>();
 
         //check expiry
-        boolean dateValidation = commonService.validateExpiry(withCredentialExpiryDate, verifiableCredential, response);
+        boolean dateValidation = CommonService.validateExpiry(withCredentialExpiryDate, verifiableCredential, response);
 
         response.put(StringPool.VALID, valid && dateValidation);
         response.put("vc", verifiableCredential);
@@ -522,6 +518,7 @@ public class IssuersCredentialService extends BaseService<IssuersCredential, Lon
             log.debug("No summery VC found for did ->{}, checking in issuer", StringEscapeUtils.escapeJava(holderDid));
         } else {
             //delete old summery VC from holder table, delete only not stored VC
+            log.debug("Deleting older summary VC fir bpn -{}", holderBpn);
             holdersCredentialRepository.deleteAll(vcs);
         }
 
