@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.managedidentitywallets.controller;
 
+import org.eclipse.tractusx.managedidentitywallets.constant.Exceptions;
 import org.eclipse.tractusx.managedidentitywallets.constant.StringPool;
 import org.eclipse.tractusx.managedidentitywallets.exception.ForbiddenException;
 import org.eclipse.tractusx.managedidentitywallets.utils.Validate;
@@ -50,7 +51,7 @@ public class BaseController {
         // ie. BPN=123456 and bpn=789456
         Map<String, Object> claims = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         claims.putAll(jwt.getClaims());
-        Validate.isFalse(claims.containsKey(StringPool.BPN)).launch(new ForbiddenException("Invalid token, BPN not found"));
+        Validate.isFalse(claims.containsKey(StringPool.BPN)).launch(new ForbiddenException(Exceptions.INVALID_TOKEN_BPN_NOT_FOUND));
         return claims.get(StringPool.BPN).toString();
     }
 }

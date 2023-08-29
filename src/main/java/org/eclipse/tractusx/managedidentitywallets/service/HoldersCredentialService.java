@@ -169,5 +169,5 @@ public class HoldersCredentialService extends BaseService<HoldersCredential, Lon
 
     private void isCredentialExistWithId(String holderDid, String credentialId) {
         Validate.isFalse(holdersCredentialRepository.existsByHolderDidAndCredentialId(holderDid, credentialId)).launch(new CredentialNotFoundProblem("Credential ID: " + credentialId + " is not exists "));
-    }
+    } // currently unused
 }

@@ -21,9 +21,13 @@
 
 package org.eclipse.tractusx.managedidentitywallets.constant;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * The type Application constant.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringPool {
 
     public static final String CREDENTIAL_ID = "credentialId";
@@ -40,11 +44,6 @@ public class StringPool {
     public static final String DID_DOCUMENT = "didDocument";
     public static final String VEHICLE_DISMANTLE = "vehicleDismantle";
     public static final String CREATED_AT = "createdAt";
-
-    private StringPool() {
-        throw new IllegalStateException("Constant class");
-    }
-
     public static final String ISSUER_DID = "issuerDid";
     public static final String HOLDER_DID = "holderDid";
     public static final String HOLDER_IDENTIFIER = "holderIdentifier";

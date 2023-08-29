@@ -26,32 +26,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ApplicationRole {
+public class Exceptions {
+
+    public static final String INVALID_TOKEN_BPN_NOT_FOUND = "Invalid token, BPN not found";
 
     /**
-     * The constant ROLE_VIEW_WALLETS.
+     * The constant BASE_WALLET_BPN_IS_NOT_MATCHING_WITH_REQUEST_BPN_FROM_TOKEN.
      */
-    public static final String ROLE_VIEW_WALLETS = "view_wallets";
-    /**
-     * The constant ROLE_VIEW_WALLET.
-     */
-    public static final String ROLE_VIEW_WALLET = "view_wallet";
-
-    /**
-     * The constant ROLE_ADD_WALLETS.
-     */
-    public static final String ROLE_ADD_WALLETS = "add_wallets";
-
-    /**
-     * The constant ROLE_UPDATE_WALLETS.
-     */
-    public static final String ROLE_UPDATE_WALLETS = "update_wallets";
-
-    /**
-     * The constant ROLE_UPDATE_WALLET.
-     */
-    public static final String ROLE_UPDATE_WALLET = "update_wallet";
-
-    public static final String ROLE_MANAGE_APP = "manage_app";
-
+    public static final String BASE_WALLET_BPN_IS_NOT_MATCHING_WITH_REQUEST_BPN_FROM_TOKEN = "Base wallet BPN is not matching with request BPN(from token)";
 }

@@ -31,6 +31,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import org.eclipse.tractusx.managedidentitywallets.config.security.SecurityConfigProperties;
+import org.eclipse.tractusx.managedidentitywallets.constant.OpenApi;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,20 +56,20 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openAPI() {
         Info info = new Info();
-        info.setTitle("Managed Identity Wallets API");
-        info.setDescription("Managed Identity Wallets API");
-        info.termsOfService("https://www.eclipse.org/legal/termsofuse.php");
-        info.setVersion("0.0.1");
+        info.setTitle(OpenApi.MANAGED_IDENTITY_WALLETS_API);
+        info.setDescription(OpenApi.MANAGED_IDENTITY_WALLETS_API_DESCRIPTION);
+        info.termsOfService(OpenApi.TERMS_OF_USE);
+        info.setVersion(OpenApi.VERSION);
 
         Contact contact = new Contact();
-        contact.name("Eclipse Tractus-X");
-        contact.email("tractusx-dev@eclipse.org");
-        contact.url("https://projects.eclipse.org/projects/automotive.tractusx");
+        contact.name(OpenApi.CONTACT_NAME);
+        contact.email(OpenApi.CONTACT_EMAIL);
+        contact.url(OpenApi.CONTACT_URL);
         info.contact(contact);
 
         License license = new License();
-        license.name("Apache 2.0");
-        license.url("https://github.com/eclipse-tractusx/managed-identity-wallets/blob/develop/LICENSE");
+        license.name(OpenApi.LICENCE_NAME);
+        license.url(OpenApi.LICENCE_URL);
         info.license(license);
 
         OpenAPI openAPI = new OpenAPI();
@@ -86,9 +87,9 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi openApiDefinition() {
         return GroupedOpenApi.builder()
-                .group("docs")
-                .pathsToMatch("/**")
-                .displayName("Docs")
+                .group(OpenApi.GROUP_DOCS)
+                .pathsToMatch(OpenApi.GROUP_PATHS)
+                .displayName(OpenApi.GROUP_DISPLAY_NAME)
                 .build();
     }
 
@@ -96,15 +97,10 @@ public class OpenApiConfig {
         Components components = new Components();
 
         //Auth using access_token
-        String accessTokenAuth = "Authenticate using access_token";
+        String accessTokenAuth = OpenApi.STRING_ACCESS_TOKEN_AUTH;
         components.addSecuritySchemes(accessTokenAuth,
                 new SecurityScheme().name(accessTokenAuth)
-                        .description("**Bearer (apiKey)** \n" +
-                                "JWT Authorization header using the Bearer scheme.\n" +
-                                "\n" +
-                                "Enter **Bearer** [space] and then your token in the text input below.\n" +
-                                "\n" +
-                                "Example: Bearer 12345abcdef")
+                        .description(OpenApi.SECURITY_SCHEME_DESCRIPTION)
                         .type(SecurityScheme.Type.APIKEY).in(SecurityScheme.In.HEADER).name(HttpHeaders.AUTHORIZATION));
         return openAPI.components(components)
                 .addSecurityItem(new SecurityRequirement()

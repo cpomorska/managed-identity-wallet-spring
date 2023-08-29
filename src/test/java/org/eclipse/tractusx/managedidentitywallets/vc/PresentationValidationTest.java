@@ -137,7 +137,7 @@ class PresentationValidationTest {
 
     @Test
     @SneakyThrows
-    public void testSuccessfulValidationForMultipleVC() {
+    void testSuccessfulValidationForMultipleVC() {
         final Map<String, Object> creationResponse = createPresentationJwt(List.of(membershipCredential_1, membershipCredential_2), tenant_1);
         // get the payload of the json web token
         final String encodedJwtPayload = ((String) creationResponse.get("vp")).split("\\.")[1];
@@ -151,7 +151,7 @@ class PresentationValidationTest {
     }
 
     @Test
-    public void testValidationFailureOfCredentialWitInvalidExpirationDate() {
+    void testValidationFailureOfCredentialWitInvalidExpirationDate() {
         // test is related to this old issue where the signature check still succeeded
         // https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4
         VerifiableCredential copyCredential = new VerifiableCredential(membershipCredential_1);
@@ -164,7 +164,7 @@ class PresentationValidationTest {
 
 
     @Test
-    public void testValidationFailureOfCredentialWitInvalidExpirationDateInSecondCredential() {
+    void testValidationFailureOfCredentialWitInvalidExpirationDateInSecondCredential() {
         // test is related to this old issue where the signature check still succeeded
         // https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4
         final VerifiableCredential copyCredential = new VerifiableCredential(membershipCredential_1);

@@ -21,14 +21,15 @@
 
 package org.eclipse.tractusx.managedidentitywallets.constant;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * The type Rest uri.
  */
-public class RestURI {
 
-    private RestURI() {
-        throw new IllegalStateException("constant class");
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class RestURI {
 
     /**
      * The constant WALLETS.
